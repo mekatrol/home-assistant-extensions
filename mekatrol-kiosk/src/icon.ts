@@ -17,7 +17,6 @@ export class MekatrolMockIcon extends LitElement {
   }
 
   render() {
-    console.log('the icon 2', this.icon);
     const [iconPrefix, origIconName] = this.icon?.split(':', 2) ?? ['mdi', 'mdi-home'];
     if (this.shadowRoot) {
       this.shadowRoot.innerHTML = `      

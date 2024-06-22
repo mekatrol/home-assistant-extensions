@@ -13,7 +13,6 @@ export default defineConfig(({ mode }) => {
       viteEnv[`${key}`] = env[key]!;
     }
   });
-  console.log('viteEnv', viteEnv);
 
   return {
     plugins: [],

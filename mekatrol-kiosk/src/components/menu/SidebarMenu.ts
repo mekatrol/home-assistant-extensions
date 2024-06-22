@@ -1,11 +1,15 @@
 import { LitElement, TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { AppConfig, MenuItem } from './types';
+import type { AppConfig, MenuItem } from '../../types';
+import { MenuSelectedEvent } from './MenuSelectedEvent';
 
 @customElement('mekatrol-sidebar-menu')
 export class MekatrolSidebarMenuElement extends LitElement {
   @property({ type: Object })
   config?: AppConfig;
+
+  @property({ type: String })
+  activeMenu?: string;
 
   getLabel(menuItem: MenuItem): TemplateResult<1> {
     return menuItem.showLabel ? html`<span>${menuItem.label}</span>` : html``;
@@ -16,7 +20,10 @@ export class MekatrolSidebarMenuElement extends LitElement {
       <nav class="sidebar-menu">
         ${this.config?.menu.map((menuItem: MenuItem) => {
           return html`
-            <a href="#">
+            <a
+              class="${this.activeMenu === menuItem.id ? 'menu-item-active' : ''}"
+              @click="${() => this.menuChange(menuItem)}"
+            >
               <ha-icon icon="${menuItem.icon}"></ha-icon>
               ${this.getLabel(menuItem)}
             </a>
@@ -24,6 +31,11 @@ export class MekatrolSidebarMenuElement extends LitElement {
         })}
       </nav>
     `;
+  }
+
+  menuChange(menuItem: MenuItem) {
+    const event = new MenuSelectedEvent(menuItem);
+    this.dispatchEvent(event);
   }
 
   static styles = css`
@@ -55,7 +67,7 @@ export class MekatrolSidebarMenuElement extends LitElement {
       color: green;
     }
 
-    .sidebar-menu > a.link-active,
+    .sidebar-menu > a.menu-item-active,
     .sidebar-menu > a:hover {
       --clr-hover: #0096ff;
       border-color: var(--clr-hover);

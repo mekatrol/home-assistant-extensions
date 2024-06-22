@@ -20,6 +20,7 @@
       type="module"
       src="/src/main.ts"
     ></script>
+    <link rel="icon" href="https://lit.dev/images/flame-favicon.svg">
   </head>
   <body>
     <mekatrol-kiosk id="mekatrol-kiosk"></mekatrol-kiosk>
@@ -31,7 +32,8 @@
           id: 'home',
           label: 'Home',
           icon: 'mdi:home',
-          showLabel: false
+          showLabel: false,
+          isDefault: true
         },
         {
           id: 'lights',

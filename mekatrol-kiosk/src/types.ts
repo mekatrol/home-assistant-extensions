@@ -3,6 +3,7 @@ export interface MenuItem {
   label: string;
   icon: string;
   showLabel: boolean;
+  isDefault?: boolean | undefined;
 }
 
 export interface AppConfig {
@@ -83,14 +84,12 @@ export class HomeAssistant {
   };
 
   private _closeEvent = (): void => {
-    console.log('closed');
-
     // Release resource
     this._ws = undefined;
   };
 
   private _errorEvent = (): void => {
-    console.log('error');
+    console.error('error');
   };
 
   private _messageEvent = (messageEvent: MessageEvent<any>): void => {
