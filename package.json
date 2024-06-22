@@ -1,0 +1,12 @@
+{
+  "name": "home-assistant-extensions",
+  "version": "1.0.0",
+  "description": "A set of extensions for home assistant",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "vite --open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSE"
+}

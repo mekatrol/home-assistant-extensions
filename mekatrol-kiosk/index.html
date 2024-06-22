@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Mekatrol Kiosk</title>
+    <link
+      rel="stylesheet"
+      href="./src/index.css"
+    />
+    <link rel=stylesheet  href=https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css>
+    <script
+      type="module"
+      src="/src/icon.ts"
+    ></script>
+    <script
+      type="module"
+      src="/src/main.ts"
+    ></script>
+  </head>
+  <body>
+    <mekatrol-kiosk id="mekatrol-kiosk"></mekatrol-kiosk>
+  </body>
+  <script>
+    const devConfig = {
+      menu: [
+        {
+          id: 'home',
+          label: 'Home',
+          icon: 'mdi:home',
+          showLabel: false
+        },
+        {
+          id: 'lights',
+          label: 'Lights',
+          icon: 'mdi:lightbulb',
+          showLabel: false
+        },
+        {
+          id: 'alarm',
+          label: 'Alarm',
+          icon: 'mdi:alarm-light',
+          showLabel: false
+        },
+        {
+          id: 'hvac',
+          label: 'Aircon',
+          icon: 'mdi:air-conditioner',
+          showLabel: false
+        },
+        {
+          id: 'irrigation',
+          label: 'Irrigation',
+          icon: 'mdi:water-pump',
+          showLabel: false
+        }
+      ]
+    };
+
+    function domReady(cb) {
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        cb();
+      } else {
+        document.addEventListener('DOMContentLoaded', cb);
+      }
+    }
+
+    domReady(() => {
+      const kioskElement = document.getElementById('mekatrol-kiosk');
+      kioskElement.devConfig = devConfig;
+    });
+  </script>
+</html>
