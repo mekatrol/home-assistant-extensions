@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { AppConfig, HomeAssistant, useHomeAssistant, type HomeAssistantConfig } from '../../types';
+import { AppConfig, CardConfig, HomeAssistant, useHomeAssistant, type HomeAssistantConfig } from '../../types';
 import { MenuSelectedEvent } from '../menu/MenuSelectedEvent';
 
 @customElement('mekatrol-kiosk')
@@ -22,6 +22,7 @@ export class MekatrolKioskElement extends LitElement {
 
   initMenu() {
     if (!this._config) {
+      this._currentView = '';
       return;
     }
 
@@ -30,6 +31,18 @@ export class MekatrolKioskElement extends LitElement {
     if (defaultMenu) {
       this._currentView = defaultMenu.id;
     }
+  }
+
+  async initViews() {
+    // No cards then do nothing other than reset
+    if (!this._config || !this._config.cards || this._config.cards.length === 0) {
+      return;
+    }
+
+    const cardPromises = this._config.cards.map((config) => this.createCardElement(config));
+    const cardPromiseResults = await Promise.all(cardPromises);
+
+    console.log(cardPromiseResults);
   }
 
   requestUpdate(name?: PropertyKey, oldValue?: unknown) {
@@ -47,6 +60,7 @@ export class MekatrolKioskElement extends LitElement {
 
     this._config = config;
     this.initMenu();
+    this.initViews();
   }
 
   set hass(hassConfig: HomeAssistantConfig) {
@@ -64,7 +78,17 @@ export class MekatrolKioskElement extends LitElement {
             @menu-selected="${this.menuSelected}"
           ></mekatrol-sidebar-menu>
         </div>
-        <div><p>${this._currentView}</p></div>
+        <div class="kiosk-content">
+          <div><mekatrol-time-card></mekatrol-time-card></div>
+          <footer>
+            <div>
+              <mekatrol-panic-switch></mekatrol-panic-switch>
+            </div>
+            <div>
+              <p>[v0.0.0.1]</p>
+            </div>
+          </footer>
+        </div>
       </div>
     `;
   }
@@ -73,9 +97,12 @@ export class MekatrolKioskElement extends LitElement {
     this._currentView = menuItem.detail.id;
   }
 
+  async createCardElement(cardConfig: CardConfig) {
+    console.log(cardConfig);
+  }
+
   static styles = css`
     :host {
-      max-width: 1280px;
       margin: 0 auto;
       padding: 0;
     }
@@ -85,6 +112,37 @@ export class MekatrolKioskElement extends LitElement {
       width: 100%;
       display: flex;
       flex-direction: row;
+
+      font-family: Consolas, serif;
+    }
+
+    .kiosk-content {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .kiosk-content > div {
+      height: 85%;
+      width: 100%;
+    }
+
+    .kiosk-content > footer {
+      height: 15%;
+      width: 100%;
+
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    .kiosk-content > footer > * {
+      align-content: center;
+    }
+
+    .kiosk-content > footer > *:nth-child(2) {
+      margin-left: auto;
+      padding-right: 1rem;
     }
   `;
 }

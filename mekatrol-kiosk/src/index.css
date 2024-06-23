@@ -8,6 +8,12 @@
   background-color: #242424;
 }
 
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
 @font-face {
   font-family: 'Material Design Icons';
   src: url('https://cdn.materialdesignicons.com/4.9.95/fonts/materialdesignicons-webfont.woff?v=4.9.95') format('woff');

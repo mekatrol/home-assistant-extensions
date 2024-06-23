@@ -6,11 +6,21 @@ export interface MenuItem {
   isDefault?: boolean | undefined;
 }
 
+export interface CardConfig {}
+
 export interface AppConfig {
   title: string;
   icon: string;
   type: string;
   menu: MenuItem[];
+  cards: CardConfig[];
+}
+
+export interface ColumnCardConfig {
+  title: string;
+  icon: string;
+  type: string;
+  cards: CardConfig[];
 }
 
 interface HomeAssistantMessage {
@@ -20,7 +30,42 @@ interface HomeAssistantMessage {
 const AUTH_REQUIRED = 'auth_required';
 const AUTH_OK = 'auth_ok';
 
+export type Context = {
+  id: string;
+  user_id: string | null;
+  parent_id: string | null;
+};
+
+export type HassEntityAttributeBase = {
+  friendly_name?: string;
+  unit_of_measurement?: string;
+  icon?: string;
+  entity_picture?: string;
+  supported_features?: number;
+  hidden?: boolean;
+  assumed_state?: boolean;
+  device_class?: string;
+  state_class?: string;
+  restored?: boolean;
+};
+
+export type HassEntityBase = {
+  entity_id: string;
+  state: string;
+  last_changed: string;
+  last_updated: string;
+  attributes: HassEntityAttributeBase;
+  context: Context;
+};
+
+export type HassEntity = HassEntityBase & {
+  attributes: { [key: string]: any };
+};
+
+export type HassEntities = { [entity_id: string]: HassEntity };
+
 export interface HomeAssistantConfig {
+  states: HassEntities;
   connection: {
     socket: WebSocket;
   };
