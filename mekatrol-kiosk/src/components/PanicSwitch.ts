@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { HassEntity, HomeAssistantConfig } from '../types';
+import { HassEntity } from 'home-assistant-js-websocket';
+import { HomeAssistant } from '../home-assistant/types';
 
 interface PanicConfig {
   entity: string;
@@ -9,7 +10,7 @@ interface PanicConfig {
 @customElement('mekatrol-panic-switch')
 export class MekatrolPanicSwitch extends LitElement {
   @property({ type: Object })
-  hass: HomeAssistantConfig | undefined;
+  hass: HomeAssistant | undefined;
 
   @property({ type: Object })
   config: PanicConfig | undefined;

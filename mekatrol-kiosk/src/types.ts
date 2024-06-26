@@ -71,7 +71,7 @@ export interface HomeAssistantConfig {
   };
 }
 
-export class HomeAssistant {
+export class HomeAssistantImplementation {
   private _url: string | undefined;
   private _accessToken: string | undefined;
   private _ws: WebSocket | undefined;
@@ -209,16 +209,16 @@ export class HomeAssistant {
 }
 
 // We want a singleton
-let homeAssistant: HomeAssistant | undefined;
+let homeAssistant: HomeAssistantImplementation | undefined;
 
-export const useHomeAssistant = (url?: string | undefined, accessToken?: string | undefined): HomeAssistant => {
+export const useHomeAssistant = (url?: string | undefined, accessToken?: string | undefined): HomeAssistantImplementation => {
   // Already created?
   if (homeAssistant) {
     // Return existing instance
     return homeAssistant;
   }
 
-  homeAssistant = new HomeAssistant(url, accessToken);
+  homeAssistant = new HomeAssistantImplementation(url, accessToken);
 
   return homeAssistant;
 };

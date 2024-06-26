@@ -1,20 +1,20 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { AppConfig, CardConfig, HomeAssistant, useHomeAssistant, type HomeAssistantConfig } from '../../types';
+import { AppConfig, CardConfig } from '../../types';
 import { MenuSelectedEvent } from '../menu/MenuSelectedEvent';
+import { HomeAssistant } from '../../home-assistant/types';
 
 @customElement('mekatrol-kiosk')
 export class MekatrolKioskElement extends LitElement {
   private _config: AppConfig | undefined;
-  private _hassConfig: HomeAssistantConfig | undefined;
-  private _homeAssistantConnector: HomeAssistant;
+  private _hass: HomeAssistant | undefined;
 
   @state()
   private _currentView: string = '';
 
   constructor() {
     super();
-    this._homeAssistantConnector = useHomeAssistant();
+    this._hass = undefined;
   }
 
   @property({ type: Object })
@@ -63,9 +63,10 @@ export class MekatrolKioskElement extends LitElement {
     this.initViews();
   }
 
-  set hass(hassConfig: HomeAssistantConfig) {
-    this._hassConfig = hassConfig;
-    this._homeAssistantConnector.attachSocket(this._hassConfig.connection.socket);
+  set hass(hass: HomeAssistant) {
+    this._hass = hass;
+
+    console.log(this._hass);
   }
 
   render() {
