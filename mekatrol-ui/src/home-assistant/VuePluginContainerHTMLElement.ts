@@ -5,34 +5,29 @@ const homeAssistantGlobal = useHomeAssistantGlobal();
 export class VuePluginContainerHTMLElement extends HTMLElement {
   private _content: HTMLDivElement | null = null;
 
-  // Whenever the state changes, a new `hass` object is set. Use this to
-  // update your content.
   set hass(hass: HomeAssistant) {
+    // Update global 'reactive' property so that all vue components get latest values
     homeAssistantGlobal.hass = hass;
 
-    // Initialize the content if it's not there yet.
+    // Create initial card HTML structure if not yet defined.
     if (!this._content) {
       this.innerHTML = `
         <ha-card header="Mekatrol Vue Plugin Card">
           <div></div>
         </ha-card>
       `;
+
+      // The content is the div inside the card
       this._content = this.querySelector('div');
     }
 
+    // Set the inner web component
     this._content!.innerHTML = '<main-view></main-view>';
   }
 
-  // The user supplied configuration. Throw an exception and Home Assistant
-  // will render an error card.
   setConfig(config: DefaultConfig) {
+    // Update global 'reactive' property so that all vue components get latest values
     homeAssistantGlobal.config = config;
-  }
-
-  // The height of your card. Home Assistant uses this to automatically
-  // distribute all cards over the available columns.
-  getCardSize() {
-    return 3;
   }
 }
 
