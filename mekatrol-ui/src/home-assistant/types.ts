@@ -202,22 +202,22 @@ export interface HomeAssistant {
   formatEntityAttributeName(stateObj: HassEntity, attribute: string): string;
 }
 
-export interface DefaultConfig {
-  entity: string | undefined;
+export interface MekatrolVuePluginConfig {
+  cardType: string | undefined;
 }
 
 export interface HomeAssistantGlobal {
   hass: HomeAssistant | undefined;
-  config: DefaultConfig | undefined;
+  config: MekatrolVuePluginConfig | undefined;
 }
 
 class HomeAssistantGlobalImplementation implements HomeAssistantGlobal {
   private _hass: Ref<HomeAssistant | undefined>;
-  private _config: Ref<DefaultConfig | undefined>;
+  private _config: Ref<MekatrolVuePluginConfig | undefined>;
 
   constructor() {
     this._hass = ref(undefined);
-    this._config = ref({ entity: undefined });
+    this._config = ref({ cardType: undefined });
   }
 
   public get hass() {
@@ -232,8 +232,7 @@ class HomeAssistantGlobalImplementation implements HomeAssistantGlobal {
     return this._config.value;
   }
 
-  public set config(config: DefaultConfig | undefined) {
-    console.log('setting config', config);
+  public set config(config: MekatrolVuePluginConfig | undefined) {
     this._config.value = config;
   }
 }
