@@ -9,7 +9,7 @@ import { customElement, property } from 'lit/decorators.js';
 @customElement('ha-icon')
 export class MekatrolMockIcon extends LitElement {
   @property({ type: String })
-  icon?: string;
+  icon?: string | undefined;
 
   constructor() {
     super();
@@ -17,19 +17,23 @@ export class MekatrolMockIcon extends LitElement {
   }
 
   render() {
-    const [iconPrefix, origIconName] = this.icon?.split(':', 2) ?? ['mdi', 'mdi-home'];
+    const [iconPrefix, iconName] = this.icon?.split(':', 2) ?? ['mdi', 'mdi-home'];
     if (this.shadowRoot) {
-      this.shadowRoot.innerHTML = `      
+      if (this.icon) {
+        this.shadowRoot.innerHTML = `
         <link rel=stylesheet  href=https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css>  
-        <span class="${iconPrefix} mdi-${origIconName}"></span>`;
+        <span class="${iconPrefix} mdi-${iconName}"></span>`;
+      } else {
+        this.shadowRoot.innerHTML = ``;
+      }
     }
 
-    return html`<span class="${iconPrefix} ${origIconName}"></span>`;
+    return html`<span class="${iconPrefix} ${iconName}"></span>`;
   }
 
   static styles = css`
     .mdi {
-      font-size: 2rem;
+      font-size: 4rem;
     }
   `;
 }

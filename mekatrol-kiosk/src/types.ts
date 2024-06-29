@@ -14,6 +14,7 @@ export interface AppConfig {
   type: string;
   menu: MenuItem[];
   cards: CardConfig[];
+  [key: string]: any;
 }
 
 export interface ColumnCardConfig {

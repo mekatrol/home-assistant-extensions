@@ -15,7 +15,7 @@ export class VuePluginContainerHTMLElement extends HTMLElement {
       // We insert a div here because when this HTML is rendered the first time the
       // web component may not yet be loaded (it this component is loaded before the inner web component)
       this.innerHTML = `
-        <ha-card header="Mekatrol Vue Plugin Card">
+        <ha-card>
           <div></div>
         </ha-card>
       `;
@@ -25,10 +25,7 @@ export class VuePluginContainerHTMLElement extends HTMLElement {
     }
 
     // If we haven't yet set inner content to the web component then do so now
-    if (this._contentPlaceholder && homeAssistantGlobal.config?.cardType) {
-      // Set the inner web component
-      this._contentPlaceholder!.innerHTML = `<${homeAssistantGlobal.config.cardType}></${homeAssistantGlobal.config.cardType}>`;
-    }
+    this.setInnerHTML();
   }
 
   setConfig(config: MekatrolVuePluginConfig) {
@@ -41,9 +38,18 @@ export class VuePluginContainerHTMLElement extends HTMLElement {
     homeAssistantGlobal.config = config;
 
     // If we haven't yet set inner content to the web component then do so now
-    if (this._contentPlaceholder && homeAssistantGlobal.config?.cardType) {
-      // Set the inner web component
-      this._contentPlaceholder!.innerHTML = `<${homeAssistantGlobal.config.cardType}></${homeAssistantGlobal.config.cardType}>`;
+    this.setInnerHTML();
+  }
+
+  private setInnerHTML() {
+    if (homeAssistantGlobal.config?.cardType) {
+      const innerHtml = `<${homeAssistantGlobal.config.cardType}></${homeAssistantGlobal.config.cardType}>`;
+
+      // If we haven't yet set inner content to the web component then do so now
+      if (this._contentPlaceholder && this._contentPlaceholder.innerHTML != innerHtml) {
+        // Set the inner web component
+        this._contentPlaceholder!.innerHTML = innerHtml;
+      }
     }
   }
 }

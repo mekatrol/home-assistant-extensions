@@ -23,31 +23,68 @@ export class MekatrolTimeCardElement extends LitElement {
     this.dateDisplay = getShortDateWithDay(dt);
   }
 
+  setConfig(_: unknown) {
+    // Method needed else HA will error with 'i.setConfig is not a function'
+  }
+
   render() {
     return html`
       <div class="mekatrol-time-card">
-        <div class="time">${this.timeDisplay}</div>
-        <div class="date">${this.dateDisplay}</div>
+        <div>
+          <p class="time">${this.timeDisplay}</p>
+        </div>
+        <div>
+          <p class="date">${this.dateDisplay}</p>
+        </div>
       </div>
     `;
   }
 
   static styles = css`
+    :host {
+      display: flex;
+      align-items: center;
+      padding: 0.1rem;
+    }
+
     .mekatrol-time-card {
       display: flex;
       flex-direction: column;
-      padding: 0.5rem;
+      gap: 10px;
       align-items: center;
+      font-family: 'Orbitron';
+      margin-top: 1rem;
+      padding-bottom: 10px;
+      width: 100%;
 
-      > .time {
-        font-size: 3rem;
-        color: #74e906;
+      @font-face {
+        font-family: 'Orbitron';
+        font-style: normal;
+        font-weight: 400 900;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/orbitron/v31/yMJRMIlzdpvBhQQL_Qq7dy0.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC,
+          U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
+    }
 
-      > .date {
-        font-size: 1.5rem;
-        color: #04be20;
-      }
+    .mekatrol-time-card > div {
+      display: flex;
+      padding: 5px;
+    }
+
+    .time {
+      font-size: 5rem;
+      color: #ff0000;
+      padding: 0;
+      margin: 0;
+    }
+
+    .date {
+      font-size: 1.5rem;
+      color: #d4d2d2;
+      padding: 0;
+      margin: 0;
     }
   `;
 }

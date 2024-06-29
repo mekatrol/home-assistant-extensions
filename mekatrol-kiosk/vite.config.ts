@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
     build: {
       lib: {
         entry: resolvePath('src/main.ts'),
-        name: 'mekatrol-kiosk',
+        name: 'mekatrol-controls',
         fileName: (format, name) => {
           if (format === 'es') {
             return `${name}.js`;
@@ -34,12 +34,13 @@ export default defineConfig(({ mode }) => {
       minify: mode === 'development' ? false : true,
       rollupOptions: {
         output: {
-          entryFileNames: `mekatrol-kiosk.js`,
+          entryFileNames: `mekatrol-controls.js`,
           assetFileNames: (assetInfo) => {
             if (assetInfo.name === 'main.css') return 'main.css';
             return assetInfo.name ?? '';
           }
-        }
+        },
+        external: ['./src/components/DebugContainer.ts', './src/home-assistant/HomeAssistantImpl.ts']
       }
     }
   };

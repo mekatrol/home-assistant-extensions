@@ -7,17 +7,22 @@ export const getMeridiem = (dt: Date): string => {
 
 export const getHours12Hour = (dt: Date): number => {
   const hrs24 = dt.getHours();
-  return hrs24 > 12 ? hrs24 - 12 : hrs24;
+  return hrs24 >= 12 ? hrs24 - 12 : hrs24;
 };
 
 export const getZeroPadded = (v: number): string => {
   return `${v}`.padStart(2, '0');
 };
 
-export const getTimeWithMeridiem = (dateTime: Date | undefined = undefined, withSeconds?: boolean): string => {
+export const getTimeWithMeridiem = (dateTime: Date | undefined = undefined, withSeconds?: boolean | undefined): string => {
   const dt = dateTime ?? new Date();
   return (
-    getHours12Hour(dt) + ':' + getZeroPadded(dt.getMinutes()) + (withSeconds ? `:${getZeroPadded(dt.getSeconds())}` : '') + ' ' + getMeridiem(dt)
+    getZeroPadded(getHours12Hour(dt)) +
+    ':' +
+    getZeroPadded(dt.getMinutes()) +
+    (!!withSeconds ? ':' + getZeroPadded(dt.getSeconds()) : '') +
+    ' ' +
+    getMeridiem(dt)
   );
 };
 

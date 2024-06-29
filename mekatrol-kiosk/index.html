@@ -21,85 +21,12 @@
       src="/src/main.ts"
     ></script>
     <link rel="icon" href="https://lit.dev/images/flame-favicon.svg">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <mekatrol-kiosk id="mekatrol-kiosk"></mekatrol-kiosk>
+    <mekatrol-debug-container id="mekatrol-debug-container"></mekatrol-debug-container>
   </body>
-  <script>
-    const devConfig = {
-      menu: [
-        {
-          id: 'home',
-          label: 'Home',
-          icon: 'mdi:home',
-          showLabel: false,
-          isDefault: true
-        },
-        {
-          id: 'lights',
-          label: 'Lights',
-          icon: 'mdi:lightbulb',
-          showLabel: false
-        },
-        {
-          id: 'alarm',
-          label: 'Alarm',
-          icon: 'mdi:alarm-light',
-          showLabel: false
-        },
-        {
-          id: 'hvac',
-          label: 'Aircon',
-          icon: 'mdi:air-conditioner',
-          showLabel: false
-        },
-        {
-          id: 'irrigation',
-          label: 'Irrigation',
-          icon: 'mdi:water-pump',
-          showLabel: false
-        }
-      ],
-      views: [
-        {
-          id: 'home',
-          type: 'column-card',
-          cards: []
-        },
-                {
-          id: 'lights',
-          type: 'column-card',
-          cards: []
-        },
-        {
-          id: 'alarm',
-          type: 'column-card',
-          cards: []
-        },
-        {
-          id: 'hvac',
-          type: 'column-card',
-          cards: []
-        },
-        {
-          id: 'irrigation',
-          type: 'column-card',
-          cards: []
-        }
-      ]
-    };
-
-    function domReady(cb) {
-      if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        cb();
-      } else {
-        document.addEventListener('DOMContentLoaded', cb);
-      }
-    }
-
-    domReady(() => {
-      const kioskElement = document.getElementById('mekatrol-kiosk');
-      kioskElement.devConfig = devConfig;
-    });
-  </script>
 </html>
