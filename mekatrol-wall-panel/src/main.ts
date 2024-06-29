@@ -21,23 +21,18 @@ documentReady(() => {
    * Set up home assistant connection
    ****************************************************************************************************/
 
-  let tick = 0;
   useIntervalTimer(async () => {
     if (!homeAssistant.connected) {
       if (!(await homeAssistant.connect(url, token))) {
+        // Return true to indicate that we want to try again in about a second
         return true;
       }
 
       await homeAssistant.startListening();
+
+      // Return false to indicate the timer can stop
+      return false;
     }
-
-    // Increment tick
-    tick++;
-
-    if (tick % 10 === 0) {
-      await homeAssistant.callService('switch.kitchen_cabinet_lights_led');
-    }
-
     return true;
   }, 1000);
 });
