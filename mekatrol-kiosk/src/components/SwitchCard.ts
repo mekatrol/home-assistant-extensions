@@ -10,11 +10,26 @@ export interface SwitchCardConfig {
 
 @customElement('mekatrol-switch-card')
 export class MekatrolSwitchCardElement extends LitElement {
-  @property({ type: Object })
-  config: SwitchCardConfig = { entities: [] };
+  private _config: SwitchCardConfig = { entities: [] } as SwitchCardConfig;
+  private _hass: HomeAssistant = {} as HomeAssistant;
 
-  @property({ type: Object })
-  hass: HomeAssistant | undefined = undefined;
+  @property({ type: Object }) set config(config: SwitchCardConfig) {
+    this._config = config;
+    this.requestUpdate();
+  }
+
+  get config() {
+    return this._config;
+  }
+
+  @property({ type: Object }) set hass(hass: HomeAssistant) {
+    this._hass = hass;
+    this.requestUpdate();
+  }
+
+  get hass() {
+    return this._hass;
+  }
 
   constructor() {
     super();

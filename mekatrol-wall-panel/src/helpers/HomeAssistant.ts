@@ -28,7 +28,7 @@ export interface UnitSystem {
 }
 
 interface HomeAssistantSubscriberConfig {
-  homeAssistantSubscriber: HomeAssistantSubscriber;
+  subscriber: HomeAssistantSubscriber;
   entities: string[];
 }
 
@@ -80,6 +80,28 @@ export class HomeAssistant {
     this._connection = undefined;
   }
 
+  private publishEntities(entities: HassEntities) {
+    this._subscribers.forEach((s) => {
+      let filteredEntities = entities;
+
+      if (s.entities.length > 0) {
+        // Clear items
+        filteredEntities = {};
+
+        // Only add those that the caller is subscribed to
+        for (let key in entities) {
+          if (s.entities.includes(key)) {
+            filteredEntities[key] = entities[key];
+          }
+        }
+      }
+
+      if (Object.keys(filteredEntities).length > 0) {
+        s.subscriber.onHomeAssistantEntities(filteredEntities);
+      }
+    });
+  }
+
   public async startListening() {
     if (!this._connection) {
       throw new Error('Not connected to home assistant');
@@ -103,25 +125,7 @@ export class HomeAssistant {
         }
       }
 
-      this._subscribers.forEach((s) => {
-        let filteredEntities = changedEntities;
-
-        if (s.entities.length > 0) {
-          // Clear items
-          filteredEntities = {};
-
-          // Only add those that the caller is subscribed to
-          for (let key in changedEntities) {
-            if (s.entities.includes(key)) {
-              filteredEntities[key] = changedEntities[key];
-            }
-          }
-        }
-
-        if (Object.keys(filteredEntities).length > 0) {
-          s.homeAssistantSubscriber.onHomeAssistantEntities(filteredEntities);
-        }
-      });
+      this.publishEntities(changedEntities);
     });
   }
 
@@ -143,7 +147,7 @@ export class HomeAssistant {
   }
 
   private subscribeInternal(subscriber: HomeAssistantSubscriber): HomeAssistantSubscriberConfig {
-    const existing = this._subscribers.find((s) => s.homeAssistantSubscriber === subscriber);
+    const existing = this._subscribers.find((s) => s.subscriber === subscriber);
 
     if (!!existing) {
       // Already subscribed, so return
@@ -151,7 +155,7 @@ export class HomeAssistant {
     }
 
     const config: HomeAssistantSubscriberConfig = {
-      homeAssistantSubscriber: subscriber,
+      subscriber: subscriber,
       entities: []
     };
 
@@ -164,12 +168,21 @@ export class HomeAssistant {
     this.subscribeInternal(subscriber);
   }
 
+  public unsubscribe(subscriber: HomeAssistantSubscriber) {
+    // Just filter to exclude, is ignored if not in subscribe list
+    this._subscribers = this._subscribers.filter((s) => s.subscriber !== subscriber);
+  }
+
   public subscribeEntities(subscriber: HomeAssistantSubscriber, entities: string[]) {
     // Make sure subscribed
     const config = this.subscribeInternal(subscriber);
 
     // The entities to subscribe to
     config.entities = entities;
+  }
+
+  public subscribeEntity(subscriber: HomeAssistantSubscriber, entityId: string) {
+    this.subscribeEntities(subscriber, [entityId]);
   }
 
   public getEntities(ids: string[]): Record<string, HassEntity> {
@@ -182,6 +195,10 @@ export class HomeAssistant {
     });
 
     return entities;
+  }
+
+  public getEntity(id: string): HassEntity | undefined {
+    return this._entityStates[id];
   }
 
   private async initialise() {
@@ -203,8 +220,11 @@ export class HomeAssistant {
     this._unitSystem = coll.state.unit_system;
 
     this._subscribers.forEach((s) => {
-      s.homeAssistantSubscriber.onHomeAssistantInitialised();
+      s.subscriber.onHomeAssistantInitialised();
     });
+
+    // Publish all entities
+    this.publishEntities(Object.assign({}, ...states.map((x) => ({ [x.entity_id]: x }))));
   }
 }
 

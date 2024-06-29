@@ -1,4 +1,5 @@
 export * from './components/main-view.ts';
+export * from './components/toggle-switch.ts';
 
 import { useIntervalTimer } from './helpers/timer.ts';
 import { useHomeAssistant } from './helpers/HomeAssistant.ts';
